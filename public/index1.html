@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat App</title>
+        <link rel="icon" href="/img/favicon.png">
+        <link rel="stylesheet" href="/css/styles.min.css">
+    </head>
+    <body>
+        <div class="centered-form">
+            <div class="centered-form__box">
+                <button id="increment">Increment</button><br><br><br>
+                <button id="send-location">send-location</button>
+            </div>
+        </div>
+
+        
+        <script src="/socket.io/socket.io.js"></script>
+
+
+        <script>
+            const socket = io()
+            // Listen for "countUpdated"
+            socket.on('countUpdated', (count) => {
+                console.log('The count has been updated!', count)
+            })
+            socket.on('message', (url) => {
+                console.log(url)
+            })
+            document.querySelector('#increment').addEventListener('click', () => {
+                console.log('increment')
+                socket.emit('increment')// Emit "increment
+            })
+            document.querySelector('#send-location').addEventListener('click', () => { if (!navigator.geolocation) {
+                    return alert('Geolocation is not supported by your browser.') 
+                }
+                navigator.geolocation.getCurrentPosition((position) => {
+                    console.log(position.coords.latitude+' <- sendLocation -> '+position.coords.longitude)
+                    socket.emit('sendLocation', {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    })
+                }) 
+            })
+        </script>
+        
+    </body>
+</html>

@@ -107,6 +107,7 @@ $sendLocationButton.addEventListener('click', () => {
 })
 
 socket.emit('join', { username, room }, (error) => {
+    console.log('join');
     if (error) {
         alert(error)
         location.href = '/'
